@@ -1,3 +1,7 @@
+vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'none' })
+vim.api.nvim_set_hl(0, 'EndOfBuffer', { bg = 'none' })
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -32,8 +36,13 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
--- Enable break indent
-vim.o.breakindent = true
+-- Indentation
+vim.opt.tabstop = 2 -- Tab width
+vim.opt.shiftwidth = 2 -- Indent width
+vim.opt.softtabstop = 2 -- Soft tab stop
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.smartindent = true -- Smart auto-indenting
+vim.opt.autoindent = true -- Copy indent from current line
 
 -- Save undo history
 vim.o.undofile = true
@@ -552,7 +561,7 @@ require('lazy').setup({
           capabilities = capabilities,
           filetypes = { 'python' },
         },
-        ts_ls = {
+        tsserver = {
           capabilities = capabilities,
           filetypes = { 'typescript' },
         },
@@ -896,25 +905,3 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
---
-
--- CUSTOM MACROS
-local esc = vim.api.nvim_replace_termcodes('<Esc>', true, true, true)
-vim.api.nvim_create_augroup('JSLogMacro', { clear = true })
-vim.api.nvim_create_augroup('PythonLogMacro', { clear = true })
-
-vim.api.nvim_create_augroup('FileType', {
-  group = 'JSLogMacro',
-  pattern = { 'javascript', 'typescript' },
-  callback = function()
-    vim.fn.setreg('l', "yoconsole.log('" .. esc .. 'pa:' .. esc .. 'la, ' .. esc .. 'pl')
-  end,
-})
-
-vim.api.nvim_create_augroup('FileType', {
-  group = 'PythonLogMacro',
-  pattern = { 'python' },
-  callback = function()
-    vim.fn.setreg('l', "yoprint('" .. esc .. 'pa:' .. esc .. 'la, ' .. esc .. 'pl')
-  end,
-})
